@@ -21,13 +21,7 @@ model <- ksvm(data[,1:10],data[,11],type="C-svc",
 #choose 100,000 for c because it is within the range giving minimum error rate at maximum margin.
 # calculate a1...am
 a <- colSums(model@xmatrix[[1]] * model@coef[[1]])
-#plot each a value - it is clear from this plot that column 5 of the data is by far the 
-# most predictive.
-plot(a)
-#create confusion matrix of attribute 5 and results - from this matrix it appears 
-# that attribute 5 is deterimative in about 86% of cases (286+278/654=.862). 
-# This is very close to what our SVM predicts.
-table(data[,11], data[,5])
+a
 # calculate a0
 a0 <- -model@b
 a0
@@ -40,3 +34,13 @@ sum(pred == data[,11]) / nrow(data)
 margin = 2/sqrt(sum(a^2))
 margin
 
+# ADDITIONAL ANALYSIS - see which a values are most important to classification
+#plot each a value - it is clear from this plot that column 5 of the data is by far the 
+# most predictive.
+plot(a)
+#create confusion matrix of attribute 5 and results - from this matrix it appears 
+# that attribute 5 is deterimative in about 86% of cases (286+278/654=.862). 
+# This is very close to what our SVM predicts.
+table(data[,11], data[,5])
+
+     

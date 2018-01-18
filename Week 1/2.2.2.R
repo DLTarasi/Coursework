@@ -11,7 +11,8 @@ summary(data)
 #convert from df to matrix
 data<-as.matrix(data)
 class(data)
-# call ksvm using rbfdot - 99.5% accuracy, but almost certainly overfitting - testing on the same data we trained on.
+# call ksvm using rbfdot - 99.5% accuracy, but almost certainly overfitting - 
+# testing on the same data we trained on, and using a very high c value.
 model <- ksvm(data[,1:10],data[,11],type="C-svc",kernel="rbfdot",C=10000,scaled=TRUE)
 # calculate a1...am
 a <- colSums(model@xmatrix[[1]] * model@coef[[1]])
