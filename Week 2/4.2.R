@@ -5,7 +5,7 @@ data(iris)
 head(iris)
 summary(iris)
 class(iris)
-#initialize model
+#initialize model, test different ks and factors
 iris_clusters <- kmeans(iris[,3:4], centers=3)
 iris_clusters
 #create table of clusters and species
