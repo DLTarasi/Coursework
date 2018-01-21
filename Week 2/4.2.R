@@ -19,7 +19,7 @@ table(Clusters, iris$Species)
 #plot petal length vs. width, color points by species
 ggplot(iris, aes(Petal.Length, Petal.Width, color = Species)) + geom_point()
 #plot petal length vs. width, color points by cluster - very close to species 
-ss1<-iris[1:50,]
+ss1<-subset(iris, iris_cluster_model$cluster == 1)
 ss2<-subset(iris, iris_cluster_model$cluster == 2)
 ss3<-subset(iris, iris_cluster_model$cluster == 3)
 ggplot(iris, aes(Petal.Length, Petal.Width, color = Clusters)) + geom_point() + 
