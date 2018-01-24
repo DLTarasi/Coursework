@@ -14,7 +14,7 @@ set.seed(10) # Set seed used in sampling so that we can reproduce sample
 sample <- sample.int(n = nrow(data), size = floor(.7*nrow(data)), replace = FALSE)
 train <- data[sample, ]
 test  <- data[-sample, ]
-#use cv.kknn to to perform k-fold cross validation. Test variety of Ks.
+#use cv.kknn to to perform k-fold cross validation. Test variety of Ks 13 was best accuracy at 86%
 cv<-cv.kknn(formula=V11~.,data=train, k=13, kernel="rectangular", distance=2,scale=TRUE, kcv = 10)
 cv = data.table(cv[[1]])
 cv$yhat <- round(cv$yhat)
