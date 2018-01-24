@@ -17,7 +17,7 @@ train <- data[sample, ]
 val <- data[sample2,]
 test  <- data[-sample, ][-sample2,]
 #create model - try a variety of hyperparameters using the validation set
-model<-kknn(V11~.,train,val,k=13,distance=2,kernel="rectangular")
+model<-kknn(V11~.,train,val,k=7,distance=2,kernel="rectangular")
 #get predictions and convert from continuous reponse to binary by rounding to 0 or 1
 predictions<-round(fitted(model))
 predictions
@@ -28,8 +28,8 @@ confusion
 accu <- sum(diag(confusion))/nrow(val)
 accu
 
-#final test with best hyperparameters
-model<-kknn(V11~.,train,test,k=13,distance=2,kernel="rectangular")
+#final test using the test set.
+model<-kknn(V11~.,train,test,k=7,distance=2,kernel="rectangular")
 #get predictions and convert from continuous reponse to binary by rounding to 0 or 1
 predictions<-round(fitted(model))
 predictions
