@@ -11,11 +11,13 @@ summary(data)
 set.seed(10) # Set seed used in sampling so that we can reproduce sample
 #generate train/test split
 # sample 85% of data and assign to train set. Assign remaining 15% to test set
-sample <- sample.int(n = nrow(data), size = floor(.7*nrow(data)), replace = FALSE)
+sample <- sample.int(n = nrow(data), size = floor(.85*nrow(data)), replace = FALSE)
 train <- data[sample, ]
 test  <- data[-sample, ]
-#use cv.kknn to to perform k-fold cross validation. Test variety of Ks 13 was best accuracy at 86%
-cv<-cv.kknn(formula=V11~.,data=train, k=13, kernel="rectangular", distance=2,scale=TRUE, kcv = 10)
+#use cv.kknn to to perform k-fold cross validation. Test variety of Ks. 7 was best accuracy at 86%
+cv<-cv.kknn(formula=V11~.,data=train, k=7, kernel="rectangular", distance=2,scale=TRUE, kcv = 10)
+#convert cv.kknn output to data table then round response variable to convert
+#continuous variable to 0 or 1
 cv = data.table(cv[[1]])
 cv$yhat <- round(cv$yhat)
 cv
@@ -25,7 +27,7 @@ prop.table(table(cv$y == cv$yhat))
 
 
 #final test with best hyperparameters
-model<-kknn(V11~.,train,test,k=13,distance=2,kernel="rectangular")
+model<-kknn(V11~.,train,test,k=7,distance=2,kernel="rectangular")
 #get predictions and convert from continuous reponse to binary by rounding to 0 or 1
 predictions<-round(fitted(model))
 predictions
