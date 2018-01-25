@@ -17,15 +17,17 @@ Clusters <- as.factor(iris_cluster_model$cluster)
 Clusters
 table(Clusters, iris$Species)
 #plot petal length vs. width, color points by species
-ggplot(iris, aes(Petal.Length, Petal.Width, color = Species)) + geom_point()
+ggplot(iris, aes(Petal.Length, Petal.Width, color = Species)) + geom_point() + 
+  labs(x = "Petal Length", y = "Petal Width", title = "Cluster by Species")
 #plot petal length vs. width, color points by cluster - very close to species 
 ss1<-subset(iris, iris_cluster_model$cluster == 1)
 ss2<-subset(iris, iris_cluster_model$cluster == 2)
 ss3<-subset(iris, iris_cluster_model$cluster == 3)
-ggplot(iris, aes(Petal.Length, Petal.Width, color = Clusters)) + geom_point() + 
-       geom_encircle(data=ss1, s_shape=0.5, expand=0.0, colour="red") + 
-       geom_encircle(data=ss2, s_shape=0.5, expand=0.0, colour="green") +
-       geom_encircle(data=ss3, s_shape=0.5, expand=0.0, colour="blue")
+ggplot(iris, aes(Petal.Length, Petal.Width, color = Species)) + geom_point() + 
+       geom_encircle(data=ss1, s_shape=0.5, expand=0.0, colour="blue") + 
+       geom_encircle(data=ss2, s_shape=0.5, expand=0.0, colour="red") +
+       geom_encircle(data=ss3, s_shape=0.5, expand=0.0, colour="green") +
+       labs(x = "Petal Length", y = "Petal Width", title = "Predicted Clusters")
 
 
 
