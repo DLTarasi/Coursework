@@ -2,7 +2,7 @@ library(ggplot2)
 library(outliers)
 #set Directory to data path
 setwd('/Users/dave/isye6501/Week 3')
-#create table of credit card data - no headers 
+#create table of crime data with headers
 data<-read.table("uscrime.txt", header = TRUE)
 #Check class and inspect data
 class(data)
