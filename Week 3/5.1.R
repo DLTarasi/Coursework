@@ -11,8 +11,7 @@ summary(data)
 #boxplot of crime data points - three potential outliers on high side of data
 g <- ggplot(data, aes(x='',Crime))
 g + geom_boxplot(varwidth=T, fill="plum") + 
-  labs(title="Box plot",
-       x="City",
+  labs(x="Cities",
        y="Crime")
 #single sided grubs tests
 grubbs.test(data$Crime, type = 10)
