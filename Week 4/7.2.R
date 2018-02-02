@@ -1,3 +1,4 @@
+library("qcc")
 #set Directory to data path
 setwd('/Users/dave/isye6501/Week 4')
 #create table temp data with headers 
@@ -17,5 +18,5 @@ hw
 plot(hw)
 hw$gamma
 seasonality<-hw$fitted[,4]
-seasonality
-cusum seasonality values
+plot(seasonality)
+cusum(seasonality, decision.interval = 150, se.shift = 1)
