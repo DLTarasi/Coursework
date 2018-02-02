@@ -20,3 +20,4 @@ hw$gamma
 seasonality<-hw$fitted[,4]
 plot(seasonality)
 cusum(seasonality, decision.interval = 150, se.shift = 1)
+write.table(seasonality, "/Users/dave/isye6501/Week 4/seasonality.txt", sep="\t")
