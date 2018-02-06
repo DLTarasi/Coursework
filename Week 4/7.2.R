@@ -10,7 +10,7 @@ summary(data)
 plot.ts(data[,2:5])
 #convert each year in data to ts object
 data<-as.vector(unlist(data[,2:21]))
-ts <- ts(data, start = 1996, end = 2015, frequency=123)
+ts <- ts(data, start = 1996, frequency=123)
 ts
 hw<-HoltWinters(ts, seasonal = c("multiplicative"),
                 optim.start = c(alpha = .5, beta = .5, gamma = .5))
