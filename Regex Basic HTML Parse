@@ -1,0 +1,22 @@
+import re
+with open('yelp.htm') as yelp_file:
+    yelp_html = yelp_file.read()
+yelp_html = yelp_html.replace('\n',"")
+rankings = []
+name_matcher = re.compile('\d\.  .*?<span>(.+?)<\/span>')
+name_matches = re.findall(name_matcher,yelp_html)
+star_matcher = re.compile('\d\.  .*?rating-large" title="(.+?) ')
+star_matches = re.findall(star_matcher,yelp_html)
+review_matcher = re.compile('\d\.  .*?review-count rating-qualifier">(.+?) r')
+review_matches = re.findall(review_matcher,yelp_html)
+price_matcher = re.compile('\d\.  .*?business-attribute price-range".*?>(.+?)<\/span>')
+price_matches = re.findall(price_matcher,yelp_html)
+for i in range(0,10):
+    str_i = str(i)
+    str_i = {}
+    str_i['name'] = name_matches[i]
+    str_i['stars'] = star_matches[i]
+    str_i['numrevs'] = int(review_matches[i])
+    str_i['price'] = price_matches[i]
+    rankings.append(str_i)
+rankings
