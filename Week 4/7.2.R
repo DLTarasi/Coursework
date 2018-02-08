@@ -8,7 +8,7 @@ class(data)
 head(data)
 summary(data)
 plot.ts(data[,2:5])
-#convert each year in data to timeseries object
+#convert each column in data to a single vector, then to a timeseries object
 data<-as.vector(unlist(data[,2:21]))
 ts <- ts(data, start = 1996, frequency=123)
 ts
