@@ -28,9 +28,11 @@ ggplot(data = uscrime_melt, aes(x=value, y=Crime)) +
 #Create model with all variables
 crimemodel <- lm(Crime ~., uscrimedata)
 summary(crimemodel)
+AIC(crimemodel)
 #create model with only variables with p value below .1
 crimemodel <- lm(Crime ~ M + Ed + Po1 + U2 + Ineq + Prob, uscrimedata)
 summary(crimemodel)
+AIC(crimemodel)
 #create test city data frame
 test_city <- c(M = 14.0, So = 0,
                Ed = 10.0, Po1 = 12.0, 
@@ -40,8 +42,8 @@ test_city <- c(M = 14.0, So = 0,
                U2 = 3.6, Wealth = 3200,
                Ineq = 20.1, Prob = 0.04, 
                Time = 39.0)
-test_city <- t(as.data.frame(test_city))
-
+test_city <- as.data.frame(t(test_city))
+#predict crime level in test city using the crime model
 new_crime = predict(object=crimemodel, newdata = test_city)
 
 
