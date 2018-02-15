@@ -41,6 +41,7 @@ crimemodelp.1 <- lm(Crime ~ M + Ed + Po1 + U2 + Ineq + Prob, uscrimedata)
 summary(crimemodelp.1)
 AIC(crimemodelp.1)
 BIC(crimemodelp.1)
+crimemodelp.1$coefficients
 
 #create model with only variables with p value below .05
 crimemodelp.05 <- lm(Crime ~ M + Ed + Ineq + Prob, uscrimedata)
@@ -78,7 +79,7 @@ summary(crimemodelp.1v2)
 AIC(crimemodelp.1v2)
 BIC(crimemodelp.1v2)
 
-########Test
+########Predict
 #create test city data frame
 test_city <- c(M = 14.0, So = 0,
                Ed = 10.0, Po1 = 12.0, 
