@@ -11,9 +11,10 @@ class(uscrimedata)
 head(uscrimedata)
 summary(uscrimedata)
 
+######Outlier Testing - ultimately decided not to remove and didn't use this code.
 #single sided grubs tests
 grubbs.test(uscrimedata$Crime, type = 10)
-# 1993 is an outlier at a p-value of .1, but not at .05
+# 1993 is an outlier at a p-value of .1, but not at .05 
 #data<-data[-26,]
 #grubbs.test(uscrimedata$Crime, type = 10)
 # 1969 is also an outlier at p-value of .1 once 1993 is removed
@@ -21,12 +22,12 @@ grubbs.test(uscrimedata$Crime, type = 10)
 #grubbs.test(uscrimedata$Crime, type = 10)
 #1674 is not an outlier at p-value of of .1
 
+#####Plotting
 #plot all variables
 uscrime_melt = melt(data=uscrimedata, measure.vars = colnames(uscrimedata[,1:15]))
 ggplot(data = uscrime_melt, aes(x=value, y=Crime)) +
   geom_point() +
   facet_wrap(~variable, scales = "free")
-
 
 ########Build Model
 #Create model with all variables
