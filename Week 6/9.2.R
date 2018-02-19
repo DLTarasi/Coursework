@@ -1,0 +1,1 @@
+pca_output$rotation %*% lm_model_from_pca$coefficients[-1]
