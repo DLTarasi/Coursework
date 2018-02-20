@@ -2,6 +2,7 @@
 library(pls)
 library(ggplot2)
 library(reshape2)
+library(ggfortify)
 #set Directory to data path
 setwd('/Users/dave/isye6501/Week 6')
 #create table of crime data with headers
@@ -34,10 +35,11 @@ R2(pcamodel)
 #Create model with top 5 components 
 pcamodel5 <- pcr(Crime ~., data = uscrimedata, scale = TRUE, ncomp = 5, validation = "LOO")
 summary(pcamodel5)
-pcacoef5<-as.data.frame(coef(pcamodel5))
+pcacoef5<-t(as.data.frame(coef(pcamodel5)))
 # calculate mean squared error and r2 of prediction
 MSEP(pcamodel5)
 R2(pcamodel5)
+
 ########Predict
 #create test city data frame - do not use So as it was not used when creating principal components
 test_city <- c(M = 14.0,
@@ -49,10 +51,8 @@ test_city <- c(M = 14.0,
                Ineq = 20.1, Prob = 0.04, 
                Time = 39.0)
 test_city <- as.data.frame(t(test_city))
-
 #predict crime level in test city using the crime model with X principal components
-new_crime = predict(object=pcacoef5, newdata = test_city)
-
+new_crime = predict(object=pcamodel5, newdata = test_city, ncomp = 5)
 
 ####### convert back to original vars
 pca_output$rotation %*% lm_model_from_pca$coefficients[-1]
