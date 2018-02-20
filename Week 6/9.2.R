@@ -24,10 +24,14 @@ ggplot(data = uscrime_melt, aes(x=value, y=Crime)) +
 uscrimedata <- uscrimedata[,-2]
 
 ########Build Model
-#Find principal components of dataset
-pcamodel <- pcr(Crime ~., data = uscrimedata, scale = TRUE)
+#Find all principal components of dataset, using 
+pcamodel <- pcr(Crime ~., data = uscrimedata, scale = TRUE, validation = "LOO")
 summary(pcamodel)
 pcacoef<-as.data.frame(coef(pcamodel))
+#Create model with top 4 components 
+pcamodel4 <- pcr(Crime ~., data = uscrimedata, scale = TRUE, ncomp = 4, validation = "LOO")
+summary(pcamodel4)
+pcacoef4<-as.data.frame(coef(pcamodel4))
 
 ########Predict
 #create test city data frame - do not use So as it was not used when creating principal components
