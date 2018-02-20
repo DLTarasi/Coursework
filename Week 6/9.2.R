@@ -24,15 +24,20 @@ ggplot(data = uscrime_melt, aes(x=value, y=Crime)) +
 uscrimedata <- uscrimedata[,-2]
 
 ########Build Model
-#Find all principal components of dataset, using 
+#Find all principal components of dataset, using leave one out cv and scaling data
 pcamodel <- pcr(Crime ~., data = uscrimedata, scale = TRUE, validation = "LOO")
 summary(pcamodel)
 pcacoef<-as.data.frame(coef(pcamodel))
-#Create model with top 4 components 
-pcamodel4 <- pcr(Crime ~., data = uscrimedata, scale = TRUE, ncomp = 4, validation = "LOO")
-summary(pcamodel4)
-pcacoef4<-as.data.frame(coef(pcamodel4))
-
+# calculate mean squared error and r2 of prediction
+MSEP(pcamodel)
+R2(pcamodel)
+#Create model with top 5 components 
+pcamodel5 <- pcr(Crime ~., data = uscrimedata, scale = TRUE, ncomp = 5, validation = "LOO")
+summary(pcamodel5)
+pcacoef5<-as.data.frame(coef(pcamodel5))
+# calculate mean squared error and r2 of prediction
+MSEP(pcamodel5)
+R2(pcamodel5)
 ########Predict
 #create test city data frame - do not use So as it was not used when creating principal components
 test_city <- c(M = 14.0,
@@ -46,7 +51,7 @@ test_city <- c(M = 14.0,
 test_city <- as.data.frame(t(test_city))
 
 #predict crime level in test city using the crime model with X principal components
-new_crime = predict(object=pcacoef, newdata = test_city)
+new_crime = predict(object=pcacoef5, newdata = test_city)
 
 
 ####### convert back to original vars
