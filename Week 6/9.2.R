@@ -55,7 +55,7 @@ test_city <- c(M = 14.0,
                Ineq = 20.1, Prob = 0.04, 
                Time = 39.0)
 test_city <- as.data.frame(t(test_city))
-#predict crime level in test city using the crime model with 5 principal components - 1443
+#predict crime level in test city using the crime model with 5 principal components - Result: 1443
 new_crime = predict(object=pcamodel5, newdata = test_city, ncomp = 5)
 #convert PCs back to original coefficients, then unscale
 pca5<-t(as.data.frame(coef(pcamodel5, intercept = TRUE)))
