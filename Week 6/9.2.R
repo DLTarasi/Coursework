@@ -36,7 +36,7 @@ plot(variancepercomp,
 #Plot Cumulative variance explained for certain number of PCs
 plot(cumsum(variancepercomp),
      xlab = "Principal Component",
-     ylab = "Percent of Variance Explained")
+     ylab = "Cumulative Amount Variance Explained")
 # calculate root mean squared error and r2 of prediction - 5 or 6 pcs looks best
 plot(RMSEP(pcamodel))
 plot(R2(pcamodel))
