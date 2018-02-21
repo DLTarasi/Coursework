@@ -40,16 +40,16 @@ plot(cumsum(variancepercomp),
      xlab = "Principal Component",
      ylab = "Percent of Variance Explained")
 
-# calculate mean squared error and r2 of prediction
-MSEP(pcamodel)
-R2(pcamodel)
+# calculate root mean squared error and r2 of prediction
+RMSEP(pcamodel)
+plot(R2(pcamodel))
 #Create model with top 5 components 
 pcamodel5 <- pcr(Crime ~., data = uscrimedata, scale = TRUE, ncomp = 5, validation = "LOO")
 summary(pcamodel5)
 #convert PCs back to original coefficietns
 pcacoef5<-t(as.data.frame(coef(pcamodel5)))
 # calculate mean squared error and r2 of prediction
-MSEP(pcamodel5)
+RMSEP(pcamodel5)
 R2(pcamodel5)
 
 ########Predict
@@ -68,4 +68,4 @@ new_crime = predict(object=pcamodel5, newdata = test_city, ncomp = 5)
 #convert PCs back to original coefficietns
 pcacoef5<-t(as.data.frame(coef(pcamodel5)))
 
-sum(pcacoef5 * test_city)
+sum(pcacoef5 * test_city)-5300
