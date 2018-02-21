@@ -12,8 +12,6 @@ class(uscrimedata)
 head(uscrimedata)
 summary(uscrimedata)
 
-
-
 #####Plotting and Data Cleaning
 #####Outlier Testing - did not remove potential outliers based on week three analysis
 #plot all variables
@@ -39,18 +37,12 @@ plot(variancepercomp,
 plot(cumsum(variancepercomp),
      xlab = "Principal Component",
      ylab = "Percent of Variance Explained")
-
-# calculate root mean squared error and r2 of prediction
-RMSEP(pcamodel)
+# calculate root mean squared error and r2 of prediction - 5 pcs looks best
+plot(RMSEP(pcamodel))
 plot(R2(pcamodel))
-#Create model with top 5 components 
-pcamodel5 <- pcr(Crime ~., data = uscrimedata, scale = TRUE, ncomp = 5, validation = "LOO")
-summary(pcamodel5)
-#convert PCs back to original coefficietns
-pcacoef5<-t(as.data.frame(coef(pcamodel5)))
-# calculate mean squared error and r2 of prediction
-RMSEP(pcamodel5)
-R2(pcamodel5)
+corrplot(pcamodel, 1:5)
+loadingplot(pcamodel, 1:5, legendpos = "bottomleft")
+pcamodel5 <- pcr(Crime ~., data = uscrimedata, scale = TRUE, validation = "LOO", ncomp = 5)
 
 ########Predict
 #create test city data frame - do not use So as it was not used when creating principal components
@@ -63,9 +55,14 @@ test_city <- c(M = 14.0,
                Ineq = 20.1, Prob = 0.04, 
                Time = 39.0)
 test_city <- as.data.frame(t(test_city))
-#predict crime level in test city using the crime model with 5 principal components - 
+#predict crime level in test city using the crime model with 5 principal components - 1443
 new_crime = predict(object=pcamodel5, newdata = test_city, ncomp = 5)
-#convert PCs back to original coefficietns
-pcacoef5<-t(as.data.frame(coef(pcamodel5)))
+#convert PCs back to original coefficients, then unscale
+pca5<-t(as.data.frame(coef(pcamodel5, intercept = TRUE)))
+pca5coef<-pca5[2:15]/pcamodel5$scale
+pca5
+#get intercept from pcamodel5
+intercept <- pca5[1]
+#manually caclculate Crime rate for test city using intercept, unscaled coefficients and test city - confirm matches 1443
+intercept + sum(pca5coef * test_city)
 
-sum(pcacoef5 * test_city)-5300
