@@ -64,6 +64,6 @@ pca6coef<-pca6[2:15]/pcamodel6$scale
 pca6
 #get intercept from pcamodel5
 intercept <- pca6[1]
-#manually caclculate Crime rate for test city using intercept, unscaled coefficients and test city - confirm matches 1443
+#manually caclculate Crime rate for test city using intercept, unscaled coefficients and test city - confirm matches 1302
 intercept + sum(pca6coef * test_city)
 
