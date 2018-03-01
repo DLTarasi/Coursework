@@ -6,7 +6,7 @@ library(reshape2)
 library(randomForest)
 library(ggfortify)
 #set Directory to data path
-setwd('/Users/dave/isye6501/Week 6')
+setwd('/Users/dave/isye6501/Week 7')
 #create table of crime data with headers
 uscrimedata<-read.table("uscrime.txt", header = TRUE)
 #Check class and inspect data
