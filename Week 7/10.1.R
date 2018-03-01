@@ -1,7 +1,9 @@
 #packages
 library(pls)
+library(rpart)
 library(ggplot2)
 library(reshape2)
+library(randomForest)
 library(ggfortify)
 #set Directory to data path
 setwd('/Users/dave/isye6501/Week 6')
@@ -25,17 +27,29 @@ uscrimedata <- uscrimedata[,-4]
 uscrimedata <- uscrimedata[,-4]
 
 ########Build Model
-#
-
+#create tree model
+?rpart
+rtree<-rpart(Crime ~., uscrimedata)
+summary(rtree)
+#create randomforest model
+?randomForest
+rforest<-randomForest(Crime ~., uscrimedata, xtest = test_city)
+summary(rforest)
+plot(rforest)
 
 ########Predict
 #create test city data frame - do not use So as it was not used when creating principal components
-test_city <- c(M = 14.0,
-               Ed = 10.0, Po1 = 12.0, 
-               Po2 = 15.5,LF = 0.640,
+test_city <- c(M = 14.0,Ed = 10.0, 
+               Po = 13.75,LF = 0.640,
                M.F = 94.0, Pop = 150,
                NW = 1.1, U1 = 0.120,
                U2 = 3.6, Wealth = 3200,
                Ineq = 20.1, Prob = 0.04, 
-               Time = 39.0)
+               Time = 39.0, So = 0)
 test_city <- as.data.frame(t(test_city))
+#regression tree
+predict(rtree, test_city)
+
+#random forest
+rforest$test
+
