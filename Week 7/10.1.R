@@ -14,7 +14,7 @@ class(uscrimedata)
 head(uscrimedata)
 summary(uscrimedata)
 
-#####Plotting and Data Cleaning
+#####Plotting and Data Cleaning - MAKE SURE TO SPLIT INTO TRAIN/TEST
 #####Outlier Testing - did not remove potential outliers based on week three analysis
 #plot all variables
 uscrime_melt = melt(data=uscrimedata, measure.vars = colnames(uscrimedata[,1:15]))
