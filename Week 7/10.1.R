@@ -25,7 +25,7 @@ uscrimedata$Po<-(uscrimedata$Po1 + uscrimedata$Po2)/2
 uscrimedata <- uscrimedata[,-4]
 uscrimedata <- uscrimedata[,-4]
 
-#CREATE TRAIN TEST VAL SPLIT
+#CREATE TRAIN TEST SPLIT
 set.seed(1)
 spec = c(train = .7, test = .3)
 
@@ -37,11 +37,10 @@ g = sample(cut(
 
 uscrimedata = split(uscrimedata, g)
 
-
 ########Build Model
 #create tree model
 ?rpart
-rtree<-rpart(Crime ~M + Ed + Po + Wealth + Ineq + Prob, uscrimedata$train, xval = 100, minbucket = 3)
+rtree<-rpart(Crime ~M + Ed + Po + Wealth + Ineq + Prob, uscrimedata$train, xval = 100, minbucket = 2)
 rpart.plot(rtree)
 summary(rtree)
 rtpredtrain<-predict(rtree, uscrimedata$train)
@@ -51,7 +50,7 @@ R2RT
 ?randomForest
 rforest<-randomForest(Crime ~ M + Ed + Po + Wealth + Ineq + Prob, uscrimedata$train, xtest = test_city, keep.forest = TRUE)
 summary(rforest)
-plot(rforest)
+rforest$importance
 rfpredtrain<-predict(rforest, uscrimedata$train)
 rfpredtrain
 R2RF <- 1 - (sum((uscrimedata$train$Crime-rfpredtrain)^2)/sum((uscrimedata$train$Crime-mean(rfpredtrain))^2))
@@ -67,9 +66,9 @@ test_city <- as.data.frame(t(test_city))
 #regression tree
 predict(rtree, test_city)
 rtpredtest<-predict(rtree, uscrimedata$test)
-rtpred
-R2RTTest <- 1 - (sum((uscrimedata$test$Crime-rtpredtest )^2)/sum((uscrimedata$test$Crime-mean(rtpredtes))^2))
-R2RTTEst
+rtpredtest
+R2RTTest <- 1 - (sum((uscrimedata$test$Crime-rtpredtest )^2)/sum((uscrimedata$test$Crime-mean(rtpredtest))^2))
+R2RTTest
 
 #random forest
 rforest$test
@@ -77,3 +76,4 @@ rfpredtest<-predict(rforest, uscrimedata$test)
 rfpredtest
 R2RFTest <- 1 - (sum((uscrimedata$test$Crime-rfpredtest)^2)/sum((uscrimedata$test$Crime-mean(rfpredtest))^2))
 R2RFTest
+
