@@ -31,6 +31,7 @@ gcdata = split(gcdata, g)
 #build model - choose based on AIC - 706 with all factors
 logreg<-glm(V21~V1+V2+V3+V4+V5+V6+V8+V14, data = gcdata$train, family=binomial(link='logit')) #best model
 summary(logreg)
+logreg$residuals
 
 #choosing a threshold based on loss function
 pred<-predict(logreg, gcdata$validate)
