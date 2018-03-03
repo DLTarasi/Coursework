@@ -29,23 +29,20 @@ uscrimedata <- uscrimedata[,-4]
 ########Build Model
 #create tree model
 ?rpart
-rtree<-rpart(Crime ~., uscrimedata)
+rtree<-rpart(Crime ~ M + Ed + Po + Wealth + Ineq + Prob, uscrimedata)
+plot(rtree)
 summary(rtree)
 #create randomforest model
 ?randomForest
-rforest<-randomForest(Crime ~., uscrimedata, xtest = test_city)
+rforest<-randomForest(Crime ~ M + Ed + Po + Wealth + Ineq + Prob, uscrimedata, xtest = test_city)
 summary(rforest)
 plot(rforest)
 
 ########Predict
-#create test city data frame - do not use So as it was not used when creating principal components
+#create test city data frame with the 6 components used in the model
 test_city <- c(M = 14.0,Ed = 10.0, 
-               Po = 13.75,LF = 0.640,
-               M.F = 94.0, Pop = 150,
-               NW = 1.1, U1 = 0.120,
-               U2 = 3.6, Wealth = 3200,
-               Ineq = 20.1, Prob = 0.04, 
-               Time = 39.0, So = 0)
+               Po = 13.75, Wealth = 3200,
+               Ineq = 20.1, Prob = 0.04)
 test_city <- as.data.frame(t(test_city))
 #regression tree
 predict(rtree, test_city)
