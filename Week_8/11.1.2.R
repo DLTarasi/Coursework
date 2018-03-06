@@ -19,7 +19,6 @@ ggplot(data = uscrime_melt, aes(x=value, y=Crime)) +
   geom_point() +
   facet_wrap(~variable, scales = "free")
 #convert to matrix for use with glm and split into input and response vars
-uscrimedata <- as.matrix(uscrimedata)
 x<-uscrimedata[,1:15]
 y<-uscrimedata[,16]
 #MAY NEED TO SCALE
@@ -35,13 +34,20 @@ g = sample(cut(
 
 x = split(x,g)
 y = split(y,g)
-########Build Model
-lasso <- glmnet(x, y, family="mgaussian", alpha=1, standardize = "TRUE")
-cv_fit <- cv.glmnet(x, y, alpha = 1)
+
+x.train <- as.matrix(x$train)
+x.test <- as.matrix(x$test)
+
+y.train <- as.matrix(y$train)
+y.test <- as.matrix(y$test)
+class(y.test)########Build Model
+?glmnet
+lasso <- glmnet(x.train, y.train, family="mgaussian", alpha=1)
+cv_fit <- cv.glmnet(x.train, y.train, alpha = 1)
 plot(cv_fit)
 ########Predict
-#create test city data frame - do not use So as it was not used when creating principal components
-test_city <- c(M = 14.0,
+#create test city data frame
+test_city <- c(M = 14.0, So = 1,
                Ed = 10.0, Po1 = 12.0, 
                Po2 = 15.5,LF = 0.640,
                M.F = 94.0, Pop = 150,
@@ -51,10 +57,10 @@ test_city <- c(M = 14.0,
                Time = 39.0)
 test_city <- t(test_city)
 #predict crime level in test city
-new_crime = predict(object=lasso, newdata = test_city)
+new_crime = predict(object=cv_fit, newx = test_city)
 new_crime
-lassopred<-predict(object=lasso, newdata=x$test)
+lassopred<-predict(object=cv_fit, newx=x.test)
 lassopred
-R2lasso <- 1 - (sum((x$test$Crime-lassopred )^2)/sum((x$test$Crime-mean(lassopred))^2))
+R2lasso <- 1 - (sum((y.test-lassopred )^2)/sum((y.test-mean(lassopred))^2))
 R2lasso
 

@@ -19,7 +19,6 @@ ggplot(data = uscrime_melt, aes(x=value, y=Crime)) +
   geom_point() +
   facet_wrap(~variable, scales = "free")
 #convert to matrix for use with glm 
-uscrimedata <- as.matrix(uscrimedata)
 x<-uscrimedata[,1:15]
 y<-uscrimedata[,16]
 
@@ -38,46 +37,52 @@ g = sample(cut(
 x = split(x,g)
 y = split(y,g)
 
+x.train <- as.matrix(x$train)
+x.test <- as.matrix(x$test)
+
+y.train <- as.matrix(y$train)
+y.test <- as.matrix(y$test)
+
 ########Build Model
 ?glmnet
 #base elastic net
-elnet <- glmnet(x$train, y$train, family="mgaussian", alpha=.5, standardize = "TRUE")
+elnet <- glmnet(x.train, y.train, family="mgaussian", alpha=.5, standardize = TRUE)
 #ridge
-ridge <- glmnet(x$train, y$train, family="mgaussian", alpha=0, standardize = "TRUE")
+ridge <- glmnet(x.train, y.train, family="mgaussian", alpha=0, standardize = TRUE)
 
 # Cross validation for each alpha = 0, 0.1, ... , 0.9, 1.0
 for (i in 0:10) {
-  assign(paste("fit", i, sep=""), cv.glmnet(x$train, y$test, type.measure="mse", 
+  assign(paste("fit", i, sep=""), cv.glmnet(x.train, y.train, type.measure="mse", 
                                             alpha=i/10,family="gaussian"))
 }
 
-yhat0 <- predict(fit0, s=fit0$lambda.1se, newx=x$test)
-yhat1 <- predict(fit1, s=fit1$lambda.1se, newx=x$test)
-yhat2 <- predict(fit2, s=fit2$lambda.1se, newx=x$test)
-yhat3 <- predict(fit3, s=fit3$lambda.1se, newx=x$test)
-yhat4 <- predict(fit4, s=fit4$lambda.1se, newx=x$test)
-yhat5 <- predict(fit5, s=fit5$lambda.1se, newx=x$test)
-yhat6 <- predict(fit6, s=fit6$lambda.1se, newx=x$test)
-yhat7 <- predict(fit7, s=fit7$lambda.1se, newx=x$test)
-yhat8 <- predict(fit8, s=fit8$lambda.1se, newx=x$test)
-yhat9 <- predict(fit9, s=fit9$lambda.1se, newx=x$test)
-yhat10 <- predict(fit10, s=fit10$lambda.1se, newx=x$test)
+yhat0 <- predict(fit0, s=fit0$lambda.1se, newx=x.test)
+yhat1 <- predict(fit1, s=fit1$lambda.1se, newx=x.test)
+yhat2 <- predict(fit2, s=fit2$lambda.1se, newx=x.test)
+yhat3 <- predict(fit3, s=fit3$lambda.1se, newx=x.test)
+yhat4 <- predict(fit4, s=fit4$lambda.1se, newx=x.test)
+yhat5 <- predict(fit5, s=fit5$lambda.1se, newx=x.test)
+yhat6 <- predict(fit6, s=fit6$lambda.1se, newx=x.test)
+yhat7 <- predict(fit7, s=fit7$lambda.1se, newx=x.test)
+yhat8 <- predict(fit8, s=fit8$lambda.1se, newx=x.test)
+yhat9 <- predict(fit9, s=fit9$lambda.1se, newx=x.test)
+yhat10 <- predict(fit10, s=fit10$lambda.1se, newx=x.test)
 
-mse0 <- mean((y$test - yhat0)^2)
-mse1 <- mean((y$test - yhat1)^2)
-mse2 <- mean((y$test - yhat2)^2)
-mse3 <- mean((y$test - yhat3)^2)
-mse4 <- mean((y$test - yhat4)^2)
-mse5 <- mean((y$test - yhat5)^2)
-mse6 <- mean((y$test - yhat6)^2)
-mse7 <- mean((y$test - yhat7)^2)
-mse8 <- mean((y$test - yhat8)^2)
-mse9 <- mean((y$test - yhat9)^2)
-mse10 <- mean((y$test - yhat10)^2)
+mse0 <- mean((y.test - yhat0)^2)
+mse1 <- mean((y.test - yhat1)^2)
+mse2 <- mean((y.test - yhat2)^2)
+mse3 <- mean((y.test - yhat3)^2)
+mse4 <- mean((y.test - yhat4)^2)
+mse5 <- mean((y.test - yhat5)^2)
+mse6 <- mean((y.test - yhat6)^2)
+mse7 <- mean((y.test - yhat7)^2)
+mse8 <- mean((y.test - yhat8)^2)
+mse9 <- mean((y.test - yhat9)^2)
+mse10 <- mean((y.test - yhat10)^2)
 
 ########Predict
 #create test city data frame - do not use So as it was not used when creating principal components
-test_city <- c(M = 14.0,
+test_city <- c(M = 14.0, So = 1,
                Ed = 10.0, Po1 = 12.0, 
                Po2 = 15.5,LF = 0.640,
                M.F = 94.0, Pop = 150,
@@ -87,11 +92,11 @@ test_city <- c(M = 14.0,
                Time = 39.0)
 test_city <-t(test_city)
 #predict crime level in test city
-new_crime = predict(object=elnet, newdata = test_city)
+new_crime = predict(fit9, s=fit9$lambda.1se, newx=test_city)
 new_crime
-elpred<-predict(object=elnet, newdata=x$test)
+elpred<-predict(fit9, s=fit9$lambda.1se, newx=x.test)
 elpred
-R2EL <- 1 - (sum((x$test$Crime-elpred )^2)/sum((x$test$Crime-mean(elpred))^2))
+R2EL <- 1 - (sum((y.test-elpred )^2)/sum((y.test-mean(elpred))^2))
 R2EL
 
 
