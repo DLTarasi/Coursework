@@ -79,7 +79,7 @@ mse7 <- mean((y.test - yhat7)^2)
 mse8 <- mean((y.test - yhat8)^2)
 mse9 <- mean((y.test - yhat9)^2)
 mse10 <- mean((y.test - yhat10)^2)
-plot(c(mse0,mse1,mse2,mse3,mse4,mse5,mse6,mse7,mse8,mse9, mse10))
+plot(c(mse0,mse1,mse2,mse3,mse4,mse5,mse6,mse7,mse8,mse9, mse10), ylab = "MSE", xlab = "Model Alpha")
 plot(fit5)
 
 ########Predict
