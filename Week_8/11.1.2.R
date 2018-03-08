@@ -56,10 +56,11 @@ test_city <- c(M = 14.0, So = 1,
                Ineq = 20.1, Prob = 0.04, 
                Time = 39.0)
 test_city <- t(test_city)
-#predict crime level in test city
+#predict crime level in test city - 1003
 new_crime = predict(object=cv_fit, newx = test_city)
 new_crime
-lassopred<-predict(object=cv_fit,  s=cv_fit$lambda.1se, newx=x.test)
+#predict crime level on test set and calculate r2
+lassopred<-predict(object=cv_fit, s=cv_fit$lambda.min, newx=x.test)
 lassopred
 R2lasso <- 1 - (sum((y.test-lassopred )^2)/sum((y.test-mean(lassopred))^2))
 R2lasso

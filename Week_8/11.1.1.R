@@ -57,3 +57,4 @@ steppred<-predict(object=step, newdata=uscrimedata$test)
 steppred
 R2step <- 1 - (sum((uscrimedata$test$Crime-steppred)^2)/sum((uscrimedata$test$Crime-mean(steppred))^2))
 R2step
+
