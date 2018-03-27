@@ -19,6 +19,12 @@ data$X1.3 <- as.numeric(data$X1.3)
 methods(mice)
 md.pattern(data)
 aggr_plot <- aggr(data, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(data), cex.axis=.7, gap=3, ylab=c("Histogram of missing data","Pattern"))
-meanimp = mice(data, method = 'mean')
-regimp = mice(data, method = 'norm')
-regperimp = mice(data, method = 'mean')
+meanimp <- mice(data, method = 'mean')
+#Impute missing values using mean, linear regression, and linear regression with perturbation
+datamean <- complete(meanimp)
+regimp <- mice(data, method = 'norm.predict')
+datatreg <- complete(regimp)
+regperimp <- mice(data, method = 'norm.nob')
+dataregper <- complete(regperimp)
+#Check accuracy of each method using SVM model
+
