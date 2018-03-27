@@ -26,7 +26,7 @@ y<-uscrimedata[,16]
 uscrimedata <- as.data.frame(scale(uscrimedata))
 #split into training and test set
 set.seed(1)
-spec = c(train = .8, test = .2)
+spec = c(train = .8, val = .1, test = .1)
 
 g = sample(cut(
   seq(nrow(x)), 
@@ -38,9 +38,11 @@ x = split(x,g)
 y = split(y,g)
 
 x.train <- as.matrix(x$train)
+x.val <- as.matrix(x$val)
 x.test <- as.matrix(x$test)
 
 y.train <- as.matrix(y$train)
+y.val <- as.matrix(y$val)
 y.test <- as.matrix(y$test)
 
 ########Build Model
@@ -56,31 +58,32 @@ for (i in 0:10) {
                                             alpha=i/10,family="gaussian"))
 }
 
-yhat0 <- predict(fit0, s=fit0$lambda.min, newx=x.test)
-yhat1 <- predict(fit1, s=fit1$lambda.min, newx=x.test)
-yhat2 <- predict(fit2, s=fit2$lambda.min, newx=x.test)
-yhat3 <- predict(fit3, s=fit3$lambda.min, newx=x.test)
-yhat4 <- predict(fit4, s=fit4$lambda.min, newx=x.test)
-yhat5 <- predict(fit5, s=fit5$lambda.min, newx=x.test)
-yhat6 <- predict(fit6, s=fit6$lambda.min, newx=x.test)
-yhat7 <- predict(fit7, s=fit7$lambda.min, newx=x.test)
-yhat8 <- predict(fit8, s=fit8$lambda.min, newx=x.test)
-yhat9 <- predict(fit9, s=fit9$lambda.min, newx=x.test)
-yhat10 <- predict(fit10, s=fit10$lambda.min, newx=x.test)
+yhat0 <- predict(fit0, s=fit0$lambda.min, newx=x.val)
+yhat1 <- predict(fit1, s=fit1$lambda.min, newx=x.val)
+yhat2 <- predict(fit2, s=fit2$lambda.min, newx=x.val)
+yhat3 <- predict(fit3, s=fit3$lambda.min, newx=x.val)
+yhat4 <- predict(fit4, s=fit4$lambda.min, newx=x.val)
+yhat5 <- predict(fit5, s=fit5$lambda.min, newx=x.val)
+yhat6 <- predict(fit6, s=fit6$lambda.min, newx=x.val)
+yhat7 <- predict(fit7, s=fit7$lambda.min, newx=x.val)
+yhat8 <- predict(fit8, s=fit8$lambda.min, newx=x.val)
+yhat9 <- predict(fit9, s=fit9$lambda.min, newx=x.val)
+yhat10 <- predict(fit10, s=fit10$lambda.min, newx=x.val)
 
-mse0 <- mean((y.test - yhat0)^2)
-mse1 <- mean((y.test - yhat1)^2)
-mse2 <- mean((y.test - yhat2)^2)
-mse3 <- mean((y.test - yhat3)^2)
-mse4 <- mean((y.test - yhat4)^2)
-mse5 <- mean((y.test - yhat5)^2)
-mse6 <- mean((y.test - yhat6)^2)
-mse7 <- mean((y.test - yhat7)^2)
-mse8 <- mean((y.test - yhat8)^2)
-mse9 <- mean((y.test - yhat9)^2)
-mse10 <- mean((y.test - yhat10)^2)
-plot(c(mse0,mse1,mse2,mse3,mse4,mse5,mse6,mse7,mse8,mse9, mse10), ylab = "MSE", xlab = "Model Alpha")
-plot(fit5)
+mse0 <- mean((y.val - yhat0)^2)
+mse1 <- mean((y.val - yhat1)^2)
+mse2 <- mean((y.val - yhat2)^2)
+mse3 <- mean((y.val - yhat3)^2)
+mse4 <- mean((y.val - yhat4)^2)
+mse5 <- mean((y.val - yhat5)^2)
+mse6 <- mean((y.val - yhat6)^2)
+mse7 <- mean((y.val - yhat7)^2)
+mse8 <- mean((y.val - yhat8)^2)
+mse9 <- mean((y.val - yhat9)^2)
+mse10 <- mean((y.val - yhat10)^2)
+plot(c(mse0, mse1,mse2,mse3,mse4,mse5,mse6,mse7,mse8,mse9, mse10), ylab = "MSE", xlab = "Model Alpha")
+
+plot(fit4)
 
 ########Predict
 #create test city data frame - do not use So as it was not used when creating principal components
@@ -94,9 +97,9 @@ test_city <- c(M = 14.0, So = 1,
                Time = 39.0)
 test_city <-t(test_city)
 #predict crime level in test city
-new_crime = predict(fit5, s=fit5$lambda.min, newx=test_city)
+new_crime = predict(fit0, s=fit0$lambda.min, newx=test_city)
 new_crime
-elpred<-predict(fit5, s=fit5$lambda.min, newx=x.test)
+elpred<-predict(fit0, s=fit0$lambda.min, newx=x.test)
 elpred
 R2EL <- 1 - (sum((y.test-elpred )^2)/sum((y.test-mean(elpred))^2))
 R2EL
