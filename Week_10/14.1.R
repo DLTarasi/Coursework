@@ -21,8 +21,8 @@ data$X2.1 <- as.factor(data$X2.1)
 methods(mice)
 md.pattern(data)
 aggr_plot <- aggr(data, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(data), cex.axis=.7, gap=3, ylab=c("Histogram of missing data","Pattern"))
-meanimp <- mice(data, method = 'mean')
 #Impute missing values using mean, linear regression, and linear regression with perturbation
+meanimp <- mice(data, method = 'mean')
 datamean <- complete(meanimp)
 regimp <- mice(data, method = 'norm.predict')
 datareg <- complete(regimp)
@@ -33,6 +33,7 @@ trControl <- trainControl(method  = "cv",
                           number  = 5)
 
 datanadrop <- na.omit(data)
+
 databinary <- data
 databinary$bin <- complete.cases(databinary)
 databinary$X1.3[is.na(databinary$X1.3)] <- 0
